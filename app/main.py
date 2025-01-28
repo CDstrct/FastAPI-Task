@@ -5,7 +5,7 @@ from . import crud, models, schemas, database
 
 app = FastAPI()
 
-# Tworzenie tabel w bazie danych
+
 models.Base.metadata.create_all(bind=database.engine)
 
 def get_db():
@@ -15,12 +15,12 @@ def get_db():
     finally:
         db.close()
 
-# Endpoint do tworzenia zadania
+
 @app.post("/tasks", response_model=schemas.Task)
 def create_task(task: schemas.TaskCreate, db: Session = Depends(get_db)):
     return crud.create_task(db=db, task=task)
 
-# Endpoint do zatrzymania sesji Pomodoro
+
 @app.post("/pomodoro/{task_id}/stop")
 def stop_pomodoro(task_id: int, db: Session = Depends(get_db)):
     session = db.query(models.Pomodoro).filter(models.Pomodoro.task_id == task_id, models.Pomodoro.completed == False).first()
@@ -84,4 +84,3 @@ def create_pomodoro(task_id: int, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_session)
     return new_session
-}
