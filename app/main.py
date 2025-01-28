@@ -45,7 +45,6 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
-# Inne endpointy
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the FastAPI Task and Pomodoro App!"}
